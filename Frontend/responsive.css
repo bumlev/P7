@@ -1,0 +1,188 @@
+@media screen and (min-width:320px) and (max-width:480px){
+
+    .header{
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+    }
+    .margin_nav{
+        display: flex;
+        margin-right:3%;
+    }
+    .margin_nav a:nth-child(2) {
+        display: none;
+    }
+    .margin_nav a:nth-child(1){
+        margin-right:0;
+    }
+
+    .groupmania{
+        display: flex;
+        flex-direction: column;
+        margin-left:auto;
+        margin-right: auto;
+        /*border:1px solid;*/
+    }
+    .block_profile{
+        width: auto;
+        height: 240px;
+        margin-left: 5px;
+        margin-right: 5px;
+        border:1px solid rgb(216, 179, 179);
+        position: relative;
+    }
+    .bio_profile{
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgb(209, 208, 208);
+    }
+    .block_profile .logout{
+        display: flex;
+    }
+    .posts{
+        display: flex;
+        flex-direction: column;
+        width: auto;
+        height: auto;
+        margin: 10px 5px 0 5px;
+    } 
+    .button_create_post{
+        width: 70%;
+    }
+    .appreciation p{
+        display: none;
+    }
+    .write_comment input{
+        width: 70%;
+    }
+
+
+
+
+    /* -------------------- Login.html ----------------------------*/
+
+    .block_login{
+        display: flex;
+        width: 90%;
+        flex-direction: column;
+        height: auto;
+        border:1px solid rgb(209, 208, 208);
+        margin: 20px auto 0 auto;   
+        background-color: white;
+        border-radius: 10px;
+    }
+
+    .form_login{
+        width: auto;
+    }
+    .login{
+        display:flex;
+        flex-direction: column;
+        width: 90%;
+        margin:20px auto;
+    }
+    .login input{
+        width: auto;
+        height:45px;
+        border-radius:20px;
+    }
+    .login button{
+        width: auto;
+        height:45px;
+        font-weight: bolder;
+        border-radius:20px;
+    }
+
+}
+
+@media screen and (min-width:481px) and (max-width:767px) {
+    .header{
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+    }
+    .margin_nav{
+        display: flex;
+        margin-right:3%;
+    }
+    .margin_nav a:nth-child(2) {
+        display: none;
+    }
+    .margin_nav a:nth-child(1){
+        margin-right:0;
+    }
+
+    .groupmania{
+        display: flex;
+        flex-direction: column;
+        margin-left:auto;
+        margin-right: auto;
+        /*border:1px solid;*/
+    }
+    .block_profile{
+        width: auto;
+        height: 240px;
+        margin-left: 5px;
+        margin-right: 5px;
+        border:1px solid rgb(216, 179, 179);
+        position: relative;
+    }
+    .block_profile .logout{
+        display: flex;
+    }
+    .bio_profile{
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgb(209, 208, 208);
+    }
+    .posts{
+        display: flex;
+        flex-direction: column;
+        width: auto;
+        height: auto;
+        margin: 10px 5px 0 5px;
+    } 
+    .button_create_post{
+        width: 70%;
+    }
+
+    .appreciation p{
+        display: none;
+    }
+    .write_comment input{
+        width: 70%;
+    }
+
+    /* -------------------- Login.html ----------------------------*/
+
+    .block_login{
+        display: flex;
+        width: 90%;
+        flex-direction: column;
+        height: auto;
+        border:1px solid rgb(209, 208, 208);
+        margin: 20px auto 0 auto;   
+        background-color: white;
+        border-radius: 10px;
+    }
+
+    .form_login{
+        width: auto;
+    }
+    .login{
+        display:flex;
+        flex-direction: column;
+        width: 90%;
+        margin:20px auto;
+    }
+    .login input{
+        width: auto;
+        height:45px;
+        border-radius:20px;
+    }
+    .login button{
+        width: auto;
+        height:45px;
+        font-weight: bolder;
+        border-radius:20px;
+    }
+
+}
