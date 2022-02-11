@@ -10,25 +10,35 @@
     <body class="body--login">
         <header class="header">
             <img class="img_logo" src="./images/icon-left-font.png"/>
+            <nav class="margin_nav">
+                <a href="#" class="p-2 text-white text-decoration-none"><i class="home_icon fas fa-user-plus fa-2x"></i>
+                    <span>Signup</span></a>
+                <a href="#" class="p-2 text-white text-decoration-none"><i class="fas fa-sign-in-alt fa-2x"></i>
+                    <span>Login</span></a>
+            </nav>
         </header>
         <div class="block_login">
-            <span>Register</span>
+            <span class="register">Register</span>
             <form class="form_login" action="#">
                 <div class="login">
                     <label for="email">Email</label>
                     <input name="email" class="input_email" type="text" id="email"/>
+                    <span id="err_email">Error de input_email</span>
                 </div>
                 <div class="login">
                     <label for="password">Password</label>
                     <input name="password" class="input_password" type="text" id="password"/>
+                    <span id="err_password">Error de input_password</span>
                 </div>
                 <div class="login">
                     <label for="username">Username</label>
                     <input name="username" class="input_username" type="text" id="username"/>
+                    <span id="err_username">Error de input_username</span>
                 </div>
                 <div class="login">
                     <label for="bio">Bio</label>
                     <input name="bio" class="input_bio" type="text" id="bio"/>
+                    <span id="err_bio">Error de input_bio</span>
                 </div>
                 <div class="login">
                     <button class="btn btn-primary">save</button>

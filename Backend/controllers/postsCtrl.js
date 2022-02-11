@@ -16,9 +16,11 @@ exports.createPost = (req , res) => {
     let headerAuth = req.headers['authorization'];
     let userId = Utils.GetUserId(headerAuth);
     
+
     /// Get data
     let title = req.body.title;
     let content = req.body.content;
+    console.log(title);
     /// Check your input
     if(title == null || content == null){
         return  res.status(400).json({ 'error': 'missing paremeters !'});
@@ -38,6 +40,7 @@ exports.createPost = (req , res) => {
                 content:content,
                 attachment:(req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null),
                 likes:0,
+                Vu:0,
                 UserId:userFound.id
             })
             .then(post =>{
@@ -57,11 +60,31 @@ exports.createPost = (req , res) => {
 exports.getAllPosts = (req , res) =>{
 
     models.Post.findAll({
-        include:{
-            model:models.User,
-            as:'user',
-            attributes:['username'],
-        } 
+        include:[
+            {
+                model:models.User,
+                as:'user',
+                attributes:['username'],
+            },
+            {
+                model:models.Comment,
+                as:'comments',
+                attributes:['content'],
+                include:{
+                    model:models.User,
+                    as:'user',
+                    attributes:['username']
+                }
+            },
+            {
+                model:models.Like,
+                as:'liks'
+                
+            }
+        ],
+        order:[
+            ['id' , 'DESC']
+        ]
     })
     .then( posts =>{
         if(posts){
@@ -83,11 +106,28 @@ exports.getOnePost = (req , res) =>{
     // get one post
     models.Post.findOne({
         where:{ id: postId },
-        include:{
-            model:models.User,
-            as:'user',
-            attributes:['username']
-        }
+        include:[
+            {
+                model:models.User,
+                as:'user',
+                attributes:['username']
+            },
+            {
+                model:models.Comment,
+                as:'comments',
+                attributes:['content'],
+                include:{
+                    model:models.User,
+                    as:'user',
+                    attributes:['username']
+                } 
+            },
+            {
+                model:models.Like,
+                as:'liks'
+                
+            }
+        ]   
     })
     .then( post => {
         if(post){
@@ -106,7 +146,7 @@ exports.updatePost = (req , res) =>{
     /// Get aut_userId
     let headerAuth = req.headers['authorization'];
     let userId = Utils.GetUserId(headerAuth);
-
+   
     /// Get Data
     let title = req.body.title;
     let content = req.body.content; 
@@ -116,6 +156,8 @@ exports.updatePost = (req , res) =>{
 
     // Get postId
     let postId = req.params.postId;
+    postId = Number(postId);
+
     if(postId <= 0){
         return res.status(400).json({' error': 'invalid value of paremeter !'});
     }
@@ -130,8 +172,27 @@ exports.updatePost = (req , res) =>{
     .then( post => {
         if(post){
             if(req.file) {
-                let filename = post.attachment.split('/images')[1];
-                fs.unlink(`images/${filename}` , () => {
+                if(post.attachment != null){
+                    let filename = post.attachment.split('/images')[1];
+                    fs.unlink(`images/${filename}` , () => {
+                        post.update({
+                            title:(title ? title : post.title),
+                            content:(content ? content : post.content),
+                            attachment: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+                        })
+                        .then( postUpdated => {
+                            if(postUpdated){
+                                res.status(200).json(postUpdated);
+                            }
+                            else{
+                                res.status(400).json({ "error" : "post not updated "});
+                            }
+                        })
+                        .catch( err => {
+                            return res.status(500).json({ "error server " : "unable to update post !"});
+                        })
+                    })
+                }else{
                     post.update({
                         title:(title ? title : post.title),
                         content:(content ? content : post.content),
@@ -148,7 +209,7 @@ exports.updatePost = (req , res) =>{
                     .catch( err => {
                         return res.status(500).json({ "error server " : "unable to update post !"});
                     })
-                })
+                }  
             }else{
                 post.update({
                     title:(title ? title : post.title),

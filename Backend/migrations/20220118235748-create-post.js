@@ -32,6 +32,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
+      Vu: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -3,7 +3,7 @@ exports.email_test = (req , res , next)=> {
     /// Validite de l'email
     let valid = test_email.test(req.body.email);
     if(!valid){
-        return res.status(400).json({ "error": "Invalid email !"});
+        return res.status(400).json({ "email_err": "Invalid email !"});
     }
     next();
 }

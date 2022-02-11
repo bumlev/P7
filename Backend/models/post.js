@@ -16,13 +16,21 @@ module.exports = (sequelize, DataTypes) => {
         as:'user'
       });
 
-      models.Post.hasMany(models.Comment);
+      models.Post.hasMany(models.Comment , {
+          as:'comments'
+      });
+
+      models.Post.hasMany(models.Like , {
+        as:'liks'
+    });
+
     }
   };
   Post.init({
     title: DataTypes.STRING,
     content: DataTypes.STRING,
     attachment: DataTypes.STRING,
+    Vu:DataTypes.INTEGER,
     likes: DataTypes.INTEGER
   }, {
     sequelize,

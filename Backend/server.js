@@ -1,43 +1,59 @@
-// import express 
-const express = require('express');
+// Importer le package http
+const http = require('http');
 
-// instanciate le serveur
-const server = express();
+// Importer app dans server.js
+const app = require('./app');
 
-// configure body-parser
-server.use(express.json());
+/// Normaliser un port 
+const normalizePort = val =>{
+    const port = parseInt(val , 10);
+    if (isNaN(port)) {
+        return val;
+    }
+    if(port >=0){
+        return port;
+    }
+    return false;
+};
 
-// import route for users
-const usersRoutes = require('./routes/users');
+const port = normalizePort(process.env.PORT || '3000');
 
-// import route for posts
-const postsRoutes = require('./routes/posts');
+/// parametrer un port avec set.app
+app.set('port' , port);
 
-// import route for comments
-const commentsRoutes = require('./routes/comments');
+const errorHandler = error =>{
+    
+    if(error.syscall !== 'listen'){ 
+        throw error;
+    }
+    const address = server.address();
+    const bind = typeof address === 'string' ? 'pipe ' + address : 'port: ' + port;
+    switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requires elevated privileges.');
+            process.exit(1);
+            break;
 
-// import route for comments
-const likesRoutes = require('./routes/likes');
+        case 'EADDRINUSE':
+            console.error(bind + ' is already in use.');
+            process.exit(1);
+            break;
+    
+        default:
+            throw error;
+    }
+};
 
-/// Import path
-const path = require('path');
 
-// configure routes 
-server.get('/' , function(req , res){
-    res.setHeader('Content-type' , 'text/html');
-    res.status(200).send('<h1>Bonjour sur mon serveur</h1>');
+// creer le serveur de node basique
+const server = http.createServer(app);
+
+server.on('error' , errorHandler);
+server.on('listening' , () =>{
+    const address = server.address();
+    const bind = typeof address === 'string' ? 'pipe' + address : 'port ' + port;
+    console.log('Listening on ' + bind);
 });
 
-/// Import path for images
-server.use('/images' , express.static(path.join(__dirname , 'images')));
-
-/// tracer une route
-server.use('/api' , usersRoutes);
-server.use('/api/posts' , postsRoutes);
-server.use('/api/comments' , commentsRoutes);
-server.use('/api/likes' , likesRoutes)
-
-// Server listen
-server.listen(3307 , function(){
-    console.log('serveur en ecoute !)');
-})
+/// execution su serveur sur un environnement avec le port 3000
+server.listen(port);

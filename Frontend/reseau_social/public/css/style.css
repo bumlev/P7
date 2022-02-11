@@ -220,6 +220,9 @@ body
     margin-left:23px;
     margin-bottom: 25px;
 }
+p.without_image{
+    margin-bottom: 100px;
+}
 .post_home img{
     height: 355px;
     object-fit: cover;

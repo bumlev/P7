@@ -10,8 +10,11 @@ const Utils = require('../utils/jwt.utils');
 // import bcrypt 
 const bcrypt = require('bcrypt');
 
+const jwt = require('jsonwebtoken');
+
 /// import crypto
 const crypto = require('crypto');
+const { JsonWebTokenError } = require('jsonwebtoken');
 
 /// Register users
 exports.register = (req, res) =>{
@@ -27,7 +30,7 @@ exports.register = (req, res) =>{
     } 
     
     if(username.length >= 13 || username.length <= 4){
-        return res.status(400).json({ 'error': "wrong username (must be 5-12) !"});
+        return res.status(400).json({ 'username_err': " wrong username (must be 5-12) !"});
     }
 
     ///crypter l'email
@@ -37,7 +40,7 @@ exports.register = (req, res) =>{
     let error = password_validator.validate(req.body.password , { details:true });
     if(error != null){
         for(i=0;error.length;i++){
-            return res.status(401).json({ message: error[i].message });
+            return res.status(401).json({ 'password_err': error[i].message});
         }
     }
 
@@ -60,7 +63,7 @@ exports.register = (req, res) =>{
                     return res.status(201).json(newUser);
                 })
                 .catch( err =>{
-                    return res.status(500).json({ err: 'user not create' });
+                    return res.status(500).json({ 'error_server': 'user not create' });
                 })
             })
            
@@ -68,13 +71,16 @@ exports.register = (req, res) =>{
             return res.status(409).json({ 'error': 'user already exist !'});
         }
     })
+    .catch( err =>{
+        return res.status(500).json({ 'error_server': 'unable to create a user !' });
+    })
 }
 
 /// login for users
 exports.login = (req , res) =>{
     let email = req.body.email;
     let password = req.body.password;
-    console.log(email)
+  
     /// check if email and password is filled 
     if(email == null || password == null){
         return res.status(400).json({ "error" : "missing parameters !"});
@@ -95,17 +101,19 @@ exports.login = (req , res) =>{
                     if(confirmUser){
                         res.status(200).json({ 
                             "userId" : userFound.id,
+                            "userisAdmin":userFound.isAdmin,
+                            'username':userFound.username,
                             'token': Utils.generatedToken(userFound)
                         });
                     }else{
-                        return res.status(403).json({ "error" : "Your password is incorrect !"});
+                        return res.status(403).json({ "password_err" : "Your password is incorrect !"});
                     }
             })
             .catch( err =>{
-                return res.status(500).json({'error server' : 'unbale to compare passwords!'});
+                return res.status(500).json({'error' : 'unbale to compare passwords!'});
             })
         }else{
-                return res.status(409).json({'error' : 'Your email is incorrect  !'})
+                return res.status(409).json({'email_err' : 'Your email is incorrect  !'})
         }
     })
     .catch(err =>{
@@ -167,11 +175,11 @@ exports.updateUser = (req , res) => {
             res.status(200).json(userUpdated);
         })
         .catch( err=>{
-            res.status(500).json({ 'error server' : 'unable to update user !'})
+            res.status(500).json({ 'error' : 'unable to update user !'})
         })
     })
     .catch( err =>{
-        res.status(500).json({ 'error server' : 'unable to find user !'})
+        res.status(500).json({ 'error' : 'unable to find user !'})
     })
 }
 
@@ -182,12 +190,18 @@ exports.deleteUser = (req , res) =>{
     })
     .then(userFound =>{
         userFound.destroy()
-        .then(userDeletd =>{
-            res.status(200).json({"message" : "user " + userDeletd.username + ' is deleted '});
+        .then(userDeleted =>{
+            res.status(200).json({"message" : "user " + userDeleted.username + ' is deleted '});
         })
         .catch( err =>{
-            res.status(500).json({" error server" : "unable to delete a user "});
+            res.status(500).json({"error" : "unable to delete a user "});
         })
     })
+}
+
+/// logout as a user
+exports.logout = (req , res , next) =>{
+    req.headers.authorization = null;
+    res.status(201).json({message: "you are logout !"});
 }
 
