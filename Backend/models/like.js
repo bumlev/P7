@@ -14,23 +14,23 @@ module.exports = (sequelize, DataTypes) => {
       models.User.belongsToMany(models.Post , {
         through: models.Like,
         foreignKey: 'userId',
-        otherKey: 'postId'
+        otherKey: 'postId',
       });
   
       models.Post.belongsToMany(models.User , {
         through: models.Like,
         foreignKey: 'postId',
-        otherKey: 'userId'
+        otherKey: 'userId',
       });
   
       models.Like.belongsTo(models.User , {
         foreignKey: 'userId',
-        as: 'user'
+        as: 'user',
       });
   
       models.Like.belongsTo(models.Post , {
         foreignKey: 'postId',
-        as: 'post'
+        as: 'post',
       });
     }
   };

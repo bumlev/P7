@@ -6,6 +6,7 @@ const Utils = require('../utils/jwt.utils');
 
 /// Import fs
 const fs = require('fs');
+const { Console } = require('console');
 
 // constants
 const TITLE_LIMIT = 2;
@@ -15,8 +16,6 @@ const CONTENT_LIMIT= 4;
 exports.createPost = (req , res) => {
     let headerAuth = req.headers['authorization'];
     let userId = Utils.GetUserId(headerAuth);
-    
-
     /// Get data
     let title = req.body.title;
     let content = req.body.content;
@@ -64,7 +63,7 @@ exports.getAllPosts = (req , res) =>{
             {
                 model:models.User,
                 as:'user',
-                attributes:['username'],
+                attributes:['username' , 'id'],
             },
             {
                 model:models.Comment,
@@ -119,7 +118,7 @@ exports.getOnePost = (req , res) =>{
                 include:{
                     model:models.User,
                     as:'user',
-                    attributes:['username']
+                    attributes:['username' , 'bio']
                 } 
             },
             {
@@ -146,7 +145,7 @@ exports.updatePost = (req , res) =>{
     /// Get aut_userId
     let headerAuth = req.headers['authorization'];
     let userId = Utils.GetUserId(headerAuth);
-   
+    console.log(req.headers);
     /// Get Data
     let title = req.body.title;
     let content = req.body.content; 
@@ -254,18 +253,77 @@ exports.deletePost = (req , res) => {
     })
     .then( post => {
         if(post){
-            let filename = post.attachment.split('/images')[1];
-            fs.unlink(`images/${filename}` , () =>{
-                post.destroy()
-                .then(postDeletd => {
-                    res.status(200).json({"message" : "post " + postDeletd.title + ' is deleted '});
+           
+            
+            if(post.attachment !== null){
+                let filename = post.attachment.split('/images')[1];
+                fs.unlink(`images/${filename}` , () =>{
+                    
+                    post.destroy()
+                    .then(postDeletd => {
+                        res.status(200).json({"message" : "post " + postDeletd.title + ' is deleted '});
+                    })
+                    .catch( err =>{
+                        res.status(500).json({" error" : "unable to delete a post "});
+                    })
                 })
-                .catch( err =>{
-                    res.status(500).json({" error" : "unable to delete a post "});
-                })
-            })
+            }else{
+                    post.destroy()
+                    .then(postDeletd => {
+                        res.status(200).json({"message" : "post " + postDeletd.title + ' is deleted '});
+                    })
+                    .catch( err =>{
+                        res.status(500).json({" error" : "unable to delete a post "});
+                    })
+            }
+            
         }else{
             return res.status(409).json({"error" : " You are not authorised to delete this post !"});
         }
+    })
+}
+
+// find recent_post
+exports.recentPosts =(req, res , next) =>{
+
+    models.Post.findAll({
+        where:{
+            Vu:0
+        },
+        include:[
+            {
+                model:models.User,
+                as:'user',
+                attributes:['username'],
+            },
+            {
+                model:models.Comment,
+                as:'comments',
+                attributes:['content'],
+                include:{
+                    model:models.User,
+                    as:'user',
+                    attributes:['username']
+                }
+            },
+            {
+                model:models.Like,
+                as:'liks'
+                
+            }
+        ],
+        order:[
+            ['id' , 'DESC']
+        ]
+        
+    })
+    .then( posts =>{
+        if(posts){
+            models.Post.increment({ Vu:1 } , {where:{Vu:0}})
+            res.status(200).json(posts)
+        }
+    })
+    .catch( err=>{
+        res.status(500).json({"error" : "unable to find recent posts !"});
     })
 }

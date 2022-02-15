@@ -43,8 +43,9 @@ export default {
                     let userId = userAuthenticated.data.userId;
                     let userisAdmin = userAuthenticated.data.userisAdmin;
                     let username = userAuthenticated.data.username;
+                    let bio = userAuthenticated.data.bio;
                     let token = userAuthenticated.data.token;
-                    let userAuth ={userId:userId , userisAdmin:userisAdmin , username:username , token:token};
+                    let userAuth ={userId:userId , userisAdmin:userisAdmin , username:username , token:token , bio:bio};
                     localStorage.setItem('userAuth' , JSON.stringify(userAuth));
                     window.location.href = "http://localhost:8080/#/home";
                     this.$router.push('/home');

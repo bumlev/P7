@@ -7,13 +7,17 @@
     }
     .margin_nav{
         display: flex;
-        margin-right:3%;
+        justify-content: space-around;
+       
     }
-    .margin_nav a:nth-child(2) {
+    .margin_nav span{
         display: none;
     }
-    .margin_nav a:nth-child(1){
-        margin-right:0;
+    .margin_nav a:last-child{
+        display: none;
+    }
+    .margin_nav a:nth-child(3){
+        margin-right:4px;
     }
 
     .groupmania{
@@ -47,6 +51,10 @@
     } 
     .button_create_post{
         width: 70%;
+    }
+
+    .info_profile{
+        display: none;
     }
     .appreciation p{
         display: none;
@@ -183,6 +191,32 @@
         height:45px;
         font-weight: bolder;
         border-radius:20px;
+    }
+
+}
+
+@media screen and (min-width: 768px) and (max-width:1024px) {
+
+    .groupmania{
+        display: flex;
+        flex-direction: column;
+        margin-left:auto;
+        margin-right: auto;
+    }
+    .block_profile{
+        width: auto;
+        height: 240px;
+        margin-left: 5px;
+        margin-right: 5px;
+        border:1px solid rgb(216, 179, 179);
+        position: relative;
+    }
+
+}
+
+@media screen and (min-width: 1025px) and (max-width:1281px) {
+    .block_profile{
+        margin-left: -30px;
     }
 
 }

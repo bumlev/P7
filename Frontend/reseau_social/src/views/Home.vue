@@ -4,7 +4,6 @@
     <head>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <link rel="stylesheet" href="/css/style.css" />
         <link rel="stylesheet" href="/css/responsive.css" />
     </head>
@@ -19,7 +18,7 @@
                </div>
                 <p class="bio_profile">Web Developer at PLus Systems Ltd</p>
                 <div class="logout">
-                    <a href="#">Logout</a>
+                    <a  @click="logout" href="#">Logout</a>
                 </div>
             </div>
 
@@ -32,6 +31,7 @@
                     <form class="form_post" @submit="save_post" >
                         <div class="post">
                             <label for="title">Title</label>
+                            <input class="input_title" v-model="id_post" id="id_post" />
                             <input class="input_title" v-model="title" id="title" />
                         </div>
                         <div class="post">
@@ -43,7 +43,8 @@
                             <input v-on:change="selectFile" class="form-control input_attachment" ref="file" type="file" id="attachment" />
                         </div>
                         <div class="button_save_post">
-                            <button class="btn btn-success">Save</button>
+                            <button id="save" class="btn btn-success save">Save</button>
+                            <button id="update" class="btn btn-success update">Save</button>
                             <button @click="close_form" id="cancel_post" class="btn btn-secondary">Cancel</button>
                         </div>
                     </form>
@@ -51,6 +52,7 @@
                 <HomeItem/>
             </div>
         </div>
+
         <div id="info_profile" class="info_profile">  
             <div class="detail_profile">
                 <img src="/images/Fresh_Tomato_Sauce_(Unsplash).jpg"/>
@@ -82,7 +84,7 @@ export default {
             title:"",
             content:"",
             file:"",
-            posts:[]
+            auth:{} 
       }
   },
   
@@ -110,6 +112,7 @@ export default {
         create_post(){
             let post_upload = document.getElementById("post_upload");
             let block_form_post = document.getElementById("block_form_post");
+            document.getElementById('id_post').style.display="none";
             post_upload.style.display = "none";
             block_form_post.style.display = "flex";
         },
@@ -126,46 +129,65 @@ export default {
         },
         save_post(e){
             e.preventDefault()
+            let user_id = document.getElementById('id_post').value;
+            console.log(user_id)
             let userAuth = localStorage.getItem('userAuth');
             userAuth = JSON.parse(userAuth);
-        
             let formData = new FormData()
             formData.append("title", this.title);
             formData.append("content", this.content);
             formData.append("image", this.file);
-            axios.post(
-                'http://localhost:3000/api/posts/create',
-                formData ,
-                {
-                    headers:{
-                        'Content-Type':'multipart/form-data',
-                        'authorization' : 'Bearer ' + userAuth.token
-                    },
-                    
-                }
-            )
-            .then( newPost =>{
-                if(newPost){
-                    axios.get(
-                        'http://localhost:3000/api/posts/',
-                        {
-                           headers:{
-                               'authorization' : 'Bearer ' + userAuth.token
-                           } 
-                        }
-                    ).then( newposts =>{
-                        if(newposts){
-                            this.posts = newposts.data;
-                            window.location.reload();
-                        }
-                    })
-                }
-            })
-            .catch( err =>{
-                console.log(err.response);
-            })
+            if(e.target.elements[4].style.display !='none'){
+                axios.post(
+                    'http://localhost:3000/api/posts/create',
+                    formData ,
+                    {
+                        headers:{
+                            'Content-Type':'multipart/form-data',
+                            'authorization' : 'Bearer ' + userAuth.token
+                        },
+                        
+                    }
+                )
+                .then( newPost =>{
+                    if(newPost){
+                    window.location.reload();
+                    }
+                })
+                .catch( err =>{
+                    console.log(err);
+                })
+            }else{
+               
+                axios.put(
+                    'http://localhost:3000/api/posts/'+user_id+'/update',
+                    formData ,
+                    {
+                        method:'PUT',
+                        headers:{
+                            'Content-Type':'multipart/form-data',
+                            'authorization' : 'Bearer ' + userAuth.token
+                        },
+                        
+                    }
+                )
+                .then( postUpdated =>{
+                    if(postUpdated){
+                        window.location.reload();
+                    }
+                })
+                .catch( err =>{
+                    console.log(err);
+                })  
+            }
+            
         }
 
+    },
+    
+    recent_post(e){
+        e.preventDefault();
+        this.$router.push('/recent_post');
     },
 
     beforeMount(){

@@ -22,6 +22,10 @@
                         <input v-model="bio" class="input_bio" type="text" id="bio"/>
                          <span id="err_bio">Error de input_bio</span>
                     </div>
+                    <div class="login">
+                        <label for="attachment">Attachment</label>
+                        <input v-on:change="selectFile" class="form-control " ref="file" type="file" id="attachment" />
+                    </div>
                        <span id="err">Error de error </span> 
                     <div class="login">
                         <button class="btn btn-primary">save</button>
@@ -39,11 +43,17 @@ export default {
                 email:"" ,
                 password: "",
                 username:"",
-                bio:""
+                bio:"",
+                file:""
         }
     },
     methods:{
-        async register(e){
+        selectFile(){
+            this.file = this.$refs.file.files[0];
+            console.log(this.file);
+        },
+    
+        register(e){
             e.preventDefault();
 
             let err_password = document.getElementById('err_password');
@@ -58,19 +68,30 @@ export default {
             let err = document.getElementById('err');
             err.style.display = 'none';
 
+            /*let formData = new FormData()
+            formData.append("email", this.email);
+            formData.append("password", this.password);
+            formData.append("username", this.username);
+            formData.append("bio", this.bio);
+            formData.append("image", this.file);*/
+
+
             let user ={
                 "email": this.email ,
                 "password": this.password,
                 "username": this.username,
                 "bio": this.bio  
             }
-            let headers = new Headers();
-            headers = headers.append('Content-Type', 'application/json');
-            await axios.post( 
+
+            /*let headers = new Headers();
+            headers = headers.append('Content-Type', 'multipart/form-data');*/
+             axios.post( 
                 'http://localhost:3000/api/users/register', 
                 user,
                 {
-                    headers : headers,
+                    headers : {
+                        'Content-Type':'application/json',
+                    },
                 }
             )
             .then( newUser => {
@@ -79,7 +100,7 @@ export default {
             })
             .catch( (err) => {
                 let data = err.response.data;
-                console.log(data.error_server);
+                console.log(data);
                 if(data.password_err){
                     err_password.style.display = 'flex';
                     err_password.textContent = data.password_err;

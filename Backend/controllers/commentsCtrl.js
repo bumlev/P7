@@ -10,7 +10,7 @@ const CONTENT_LIMIT= 4;
 
 /// create comment
 exports.createComment = (req , res) =>{
-    let headerAuth = req.headers['authorization'];
+    let headerAuth = req.headers.authorization;
     let userId = Utils.GetUserId(headerAuth);
 
     /// get postId by using params.
@@ -68,7 +68,7 @@ exports.getAllComments = (req , res) =>{
         include:{
             model:models.User,
             as:'user',
-            attributes:['username']
+            attributes:['username' , 'bio']
         }
     })
     .then( comments => {

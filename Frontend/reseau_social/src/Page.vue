@@ -2,25 +2,36 @@
     <header class="header">
             <img class="img_logo" src="/images/icon-left-font.png"/>
             <nav class="margin_nav">
-                <a href="#" class="p-2 text-white text-decoration-none"><i class="home_icon fa fa-home fa-2x" aria-hidden="true"></i>
-                    <span> Home</span></a>
-                <a href="#" class="p-2 text-white text-decoration-none"><i class="fa fa-blog fa-2x"></i>
-                <span>Recent Posts</span></a>
+                <router-link to="/home" class="p-2 text-white text-decoration-none"><i class="home_icon fa fa-home fa-2x" aria-hidden="true"></i>
+                    <span> Home</span></router-link>
+                <router-link :to="{path:'/MyProfile/' + userAuth.userId}" class="p-2 text-white text-decoration-none"><i class="fa fa-address-card fa-2x"></i>
+                <span>My profil</span></router-link>
 
-                <a @mouseover="listdown" id="me" href="#" class="p-2 text-white text-decoration-none"><div><img class="img_profile rounded-circle" src="/images/sauce-black-cherry-vanille-infusee-au-bourbon.jpg1643043040939.jpg"/></div><div>Me<i class="fas fa-caret-down"></i></div></a>
+                <router-link v-if="userAuth.userisAdmin == 1" to="/users" class="p-2 text-white text-decoration-none"><i class="fa fa-users fa-2x"></i>
+                <span> Users</span></router-link>
+                
+                <router-link @click="recent_post" id="recent_post" to="recent_post" class="p-2 text-white text-decoration-none"><i class="fa fa-blog fa-2x"></i>
+                <span>Recent Posts</span></router-link>
+
+                <router-link @mouseover="listdown" id="me" to="#" class="p-2 text-white text-decoration-none"><div><img class="img_profile rounded-circle" src="/images/sauce-black-cherry-vanille-infusee-au-bourbon.jpg1643043040939.jpg"/></div><div>Me<i class="fas fa-caret-down"></i></div></router-link>
             </nav>
     </header>
-    <Home/>
+    <router-view />
 </template>
 
 <script>
-import Home from './views/Home.vue';
+///import Home from './views/Home.vue';
 export default {
     name:"Page", 
-    components:{
+    /*components:{
         Home
+    },*/
+    data(){
+        return {
+            userAuth:{},
+            userId:''
+        }
     },
-
     methods:{
         listdown(){
             //let me = document.getElementById("me");
@@ -30,6 +41,11 @@ export default {
                 info_profile.style.display = "none";
             })
         }
+    },
+    beforeMount(){
+        let userAuth = localStorage.getItem('userAuth');
+        userAuth = JSON.parse(userAuth);
+        this.userAuth = userAuth;
     }
 }
 </script>

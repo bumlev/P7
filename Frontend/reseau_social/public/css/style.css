@@ -40,7 +40,7 @@ body
     font-weight:bold;
 }
 
-.margin_nav a:nth-child(1) , .margin_nav a:nth-child(2){
+.margin_nav a:nth-child(1) , .margin_nav a:nth-child(2) , .margin_nav a:nth-child(3){
     margin-right: 75px;
 }
 
@@ -57,7 +57,7 @@ body
     flex-direction: column;
     width: 230px;
     margin-left: 70px;
-    border:1px solid rgb(216, 179, 179);
+    border:1px solid rgb(209, 208, 208);
     margin-top: 19px;
     border-radius: 10px;
     height: 210px;
@@ -77,6 +77,18 @@ body
 
 .name_profile{
     margin: 60px auto 20px auto;
+    text-decoration: none;
+}
+.name_profile a{
+    text-decoration: none;
+    color:black;
+}
+
+.name_user{
+    margin:80px auto 20px auto;
+}
+.name_user span{
+    font-size: 22px;
 }
 
 .bio_profile{
@@ -84,6 +96,10 @@ body
     font-weight: 400;
     color: grey;
     font-size: 13px;
+}
+
+p.bio_user{
+    font-size: 16px;  
 }
 .block_profile .logout{
     display: none;
@@ -95,6 +111,24 @@ body
     border-radius: 40px;
     margin: 17px auto 6px auto;
 }
+.photo_user_profile{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height:90px;
+    background-color: #BBDEFB;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.photo_user_profile img{
+    width: 120px;
+    height: 121px;
+    object-fit: cover;
+    border-radius: 80px;
+    margin: 20px auto 6px auto;
+    border:1px solid rgb(209, 208, 208);
+}
+
 .posts{
     width: 650px;
     margin-right: auto;
@@ -112,6 +146,22 @@ body
     margin:19px 5px 0 5px;
     border-radius: 10px;
     background-color: white;
+   
+}
+
+.post_profile{
+    display:flex;
+    flex-direction: column;
+    margin-top:20px;
+    background-color: white;
+    padding-bottom: 15px;
+    border-radius: 10px;
+    border:1px solid rgb(209, 208, 208);
+}
+
+.post_upload span{
+    font-style:oblique;
+    font-size: 35px;
 }
 
 .img_profile_upload{
@@ -146,7 +196,11 @@ body
     background-color: white;
     border-radius: 10px;
 }
-
+.block_form_post span{
+    margin:20px auto;
+    font-size:25px;
+    font-style: italic;
+}
 .form_post {
     display: flex;
     flex-direction: column;
@@ -157,6 +211,9 @@ body
     margin: 20px 20px;
     font-weight: bold;
     color: grey;
+}
+.user_id{
+    display:none;
 }
 .post .input_title {
     height: 50px;
@@ -181,6 +238,12 @@ body
     font-weight: bold;
     color: grey;
 }
+.update{
+    display:none;
+}
+div.button_edit_user{
+    margin: 30px 20px;
+}
 
 .button_save_post button {
     height: 50px;
@@ -199,10 +262,45 @@ body
 }
 
 .list_posts .post_user {
+    display: flex;
+    justify-content: space-between;
     margin: 10px 23px 0px 23px;
     padding-bottom: 10px;
     border-bottom: 1px solid rgb(209, 209, 209);
 }
+.post_user a{
+    text-decoration: none;
+    color:black;
+}
+
+.edit_profil{
+    display:flex;
+    width: 120px;
+    flex-direction: column;
+}
+
+.edit_item{
+    display: none;
+    flex-direction: column;
+    width: auto;
+    border:1px solid rgb(223, 220, 220);
+    background-color: whitesmoke;
+}
+.item_1 , .item_2{
+    font-size:15px;
+    margin-left: auto;
+    margin-right: auto;  
+}
+.item_1{
+    border-bottom: 1px solid grey;
+}
+
+.item{
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 20px;
+}
+
 .post_home{
     display: flex;
     flex-direction: column;

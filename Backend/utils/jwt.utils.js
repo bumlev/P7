@@ -37,3 +37,20 @@ exports.GetUserId = (authorization) =>{
         }   
     }
 }
+exports.checkAdmin =(authorization) =>{
+
+    let userId = -1;
+    console.log(authorization);
+    let token = module.exports.parseAuthorization(authorization).split(' ')[1];
+    if(token != null){
+        try{
+            let jwtToken = jwt.verify(token , JWT_SIGN_SECRET);
+            if(token != null){
+                userisAdmin = jwtToken. userisAdmin;
+                return userisAdmin;
+            }
+        }catch(err){
+            return err;
+        }   
+    }
+}

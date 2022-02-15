@@ -12,7 +12,7 @@ const DISLIKED = 0;
 exports.likePost = (req , res) => {
 
     // Get UserId 
-    let headerAuth = req.headers['authorization'];
+    let headerAuth = req.body.headers['Authorization'];
     let userId = Utils.GetUserId(headerAuth);
    
     // Get postId
@@ -107,7 +107,7 @@ exports.likePost = (req , res) => {
 exports.dislikePost = (req , res) =>{
 
     /// To Get userId
-    let headerAuth = req.headers['authorization'];
+    let headerAuth = req.body.headers['Authorization'];
     let userId = Utils.GetUserId(headerAuth);
 
     /// To get postId
