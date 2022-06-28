@@ -6,7 +6,6 @@ const Utils = require('../utils/jwt.utils');
 
 /// Import fs
 const fs = require('fs');
-const { Console } = require('console');
 
 // constants
 const TITLE_LIMIT = 2;

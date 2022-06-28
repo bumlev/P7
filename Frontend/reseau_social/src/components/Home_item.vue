@@ -32,6 +32,9 @@
                 document.getElementById('update').style.display = 'flex';
                 let postId = e.target.dataset.post;
                 console.log(postId)
+                localStorage.setItem('post' , postId);
+                let post =   localStorage.getItem('post');
+                console.log(post);
                 axios.get('http://localhost:3000/api/posts/'+ postId + '/post',
                     {
                         headers:{
@@ -41,7 +44,7 @@
                 )
                 .then( postFound =>{
                     this.post = postFound
-                    document.getElementById('id_post').value = postFound.data.id;
+                  
                    
                     document.getElementById('title').value = postFound.data.title;
                     document.getElementById('content').value = postFound.data.content;
@@ -83,7 +86,7 @@
                 )
                 .then((like) =>{
                     document.getElementById('liked').textContent = like.data.likes +'member(s) like this';
-                    window.location.reload();
+                    //window.location.reload();
                 })
             },
 
@@ -102,7 +105,7 @@
                 
                 )
                 .then(() =>{
-                   window.location.reload()
+                  // window.location.reload()
                 })
             },
             post_comment(e){
@@ -216,8 +219,6 @@
 
     
 </template>
-
-
 <style>
 
 </style>

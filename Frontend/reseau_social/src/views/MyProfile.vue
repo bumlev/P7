@@ -93,9 +93,6 @@ export default {
         }
     },
     methods:{
-        MyProfile(){
-            //console.log(e.target);
-        },
         delete_user(e){
             let userId = e.target.dataset.user;
             axios.delete('http://localhost:3000/api/users/'+userId+ '/delete')

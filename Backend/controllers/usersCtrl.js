@@ -14,12 +14,12 @@ const jwt = require('jsonwebtoken');
 
 /// import crypto
 const crypto = require('crypto');
-const { JsonWebTokenError } = require('jsonwebtoken');
 
 /// Register users
 exports.register = (req, res) =>{
 
     let email = req.body.email; 
+    console.log(email);
     let password = req.body.password;
     let username = req.body.username;
     let bio = req.body.bio;

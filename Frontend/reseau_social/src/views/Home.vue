@@ -31,7 +31,6 @@
                     <form class="form_post" @submit="save_post" >
                         <div class="post">
                             <label for="title">Title</label>
-                            <input class="input_title" v-model="id_post" id="id_post" />
                             <input class="input_title" v-model="title" id="title" />
                         </div>
                         <div class="post">
@@ -94,10 +93,10 @@ export default {
             axios.post(
               'http://localhost:3000/api/users/logout',
               {
-                  headers:{
-                      'Content-type':'application/json',
-                      'authorization':"Bearer " + this.auth
-                  }
+                headers:{
+                    'Content-type':'application/json',
+                    'authorization':"Bearer " + this.auth
+                }
               }
             )
             .then( message =>{
@@ -112,7 +111,6 @@ export default {
         create_post(){
             let post_upload = document.getElementById("post_upload");
             let block_form_post = document.getElementById("block_form_post");
-            document.getElementById('id_post').style.display="none";
             post_upload.style.display = "none";
             block_form_post.style.display = "flex";
         },
@@ -129,9 +127,9 @@ export default {
         },
         save_post(e){
             e.preventDefault()
-            let user_id = document.getElementById('id_post').value;
-            console.log(user_id)
+
             let userAuth = localStorage.getItem('userAuth');
+            let post = localStorage.getItem('post');
             userAuth = JSON.parse(userAuth);
             let formData = new FormData()
             formData.append("title", this.title);
@@ -151,7 +149,8 @@ export default {
                 )
                 .then( newPost =>{
                     if(newPost){
-                    window.location.reload();
+                        this.$router.push('/home');
+                        window.location.reload();
                     }
                 })
                 .catch( err =>{
@@ -160,10 +159,9 @@ export default {
             }else{
                
                 axios.put(
-                    'http://localhost:3000/api/posts/'+user_id+'/update',
+                    'http://localhost:3000/api/posts/'+post+'/update',
                     formData ,
                     {
-                        method:'PUT',
                         headers:{
                             'Content-Type':'multipart/form-data',
                             'authorization' : 'Bearer ' + userAuth.token
