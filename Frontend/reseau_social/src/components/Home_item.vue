@@ -71,9 +71,10 @@
                 })
             },
             like_post(e){
-                 e.preventDefault()
-                let like_icon =  e.target;
-                let postId =like_icon.dataset.post;
+                e.preventDefault() 
+                let like_icon =  e.explicitOriginalTarget;
+                let postId = like_icon.dataset.post;
+                console.log(postId)
                 axios.post('http://localhost:3000/api/likes/'+postId+'/like',
                 
                 {
@@ -85,6 +86,8 @@
                 
                 )
                 .then((like) =>{
+                    let clos = like_icon.closest('div.appreciation');
+                    console.log(clos);
                     document.getElementById('liked').textContent = like.data.likes +'member(s) like this';
                     //window.location.reload();
                 })
@@ -92,21 +95,21 @@
 
             dislike_post(e){
                 e.preventDefault()
-                let postId =e.target.dataset.post;
+                let postId = e.explicitOriginalTarget.dataset.post;
                 console.log(postId)
-               axios.post('http://localhost:3000/api/likes/'+postId+'/dislike',
-                
-                {
-                    headers:{
-                        'Content-Type':'application/json',
-                        'Authorization':"Bearer " + this.userAuth.token
+                axios.post('http://localhost:3000/api/likes/'+postId+'/dislike',
+                    
+                    {
+                        headers:{
+                            'Content-Type':'application/json',
+                            'Authorization':"Bearer " + this.userAuth.token
+                        }
                     }
-                }
-                
-                )
-                .then(() =>{
-                  // window.location.reload()
-                })
+                    
+                    )
+                    .then(() =>{
+                    // window.location.reload()
+                    })
             },
             post_comment(e){
                 e.preventDefault()
@@ -184,15 +187,15 @@
 
             <div class="appreciation">
                 <button @click="like_post" id="like" :data-post="item.id"><div>
-                    <i v-if="item.liks.some(obj => obj.userId === userAuth.userId && obj.isLike == 1)" style="color:blue" class="fa fa-thumbs-up fa-2x" aria-hidden="true"></i>
-                    <i v-else class="fa fa-thumbs-up fa-2x" aria-hidden="true"></i>
-                    <p>like</p></div>
+                    <i v-if="item.liks.some(obj => obj.userId === userAuth.userId && obj.isLike == 1)" style="color:blue" class="fa fa-thumbs-up fa-2x" aria-hidden="true" :data-post="item.id"></i>
+                    <i v-else class="fa fa-thumbs-up fa-2x" aria-hidden="true" :data-post="item.id"></i>
+                    <p :data-post="item.id">like</p></div>
                 </button>
                 
                 <button  @click.prevent="dislike_post" id="dislike" :data-post="item.id">
-                    <i v-if="item.liks.some(obj => obj.userId === userAuth.userId && obj.isLike == 0)" style="color:blue" class="fa fa-thumbs-down fa-2x" aria-hidden="true"></i>
+                    <i v-if="item.liks.some(obj => obj.userId === userAuth.userId && obj.isLike == 0)" style="color:blue" class="fa fa-thumbs-down fa-2x" aria-hidden="true" :data-post="item.id"></i>
                     <i v-else class="fa fa-thumbs-down fa-2x" aria-hidden="true"></i>
-                    <p>dislike</p>
+                    <p :data-post="item.id">dislike</p>
                 </button>
                 <button class=""><div><i class="fa fa-comment fa-2x" aria-hidden="true"></i>
                     <p>comment</p></div></button>

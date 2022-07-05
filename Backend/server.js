@@ -21,7 +21,7 @@ const port = normalizePort(process.env.PORT || '3000');
 /// parametrer un port avec set.app
 app.set('port' , port);
 
-const errorHandler = error =>{
+const errorHandler = error => {
     
     if(error.syscall !== 'listen'){ 
         throw error;
@@ -49,11 +49,12 @@ const errorHandler = error =>{
 const server = http.createServer(app);
 
 server.on('error' , errorHandler);
-server.on('listening' , () =>{
+server.on('listening' , () => {
     const address = server.address();
     const bind = typeof address === 'string' ? 'pipe' + address : 'port ' + port;
     console.log('Listening on ' + bind);
 });
+console.log('hey')
 
 /// execution su serveur sur un environnement avec le port 3000
 server.listen(port);
